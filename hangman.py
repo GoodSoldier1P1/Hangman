@@ -23,16 +23,23 @@ def hangman(word):
     letters = list(word)
     guessed = []
     while count < limit:
-        guess = input(f'Hangman Word: {display} Enter your guess: \n').strip()
+        guess = input(f'Wrong Guesses: {guessed} \nHangman Word: {display} Enter your guess: \n').strip()
         while len(guess) == 0 or len(guess) > 1:
             print('Invalid input. Enter a single letter\n')
             guess = input(
-                f'Hangman Word: {display} Enter your guess: \n'
+                f'Wrong Guesses: {guessed} \nHangman Word: {display} Enter your guess: \n'
             ).strip()
+
+        if guess in guessed:
+            print('Oops! You already tried that guess, try again!\n')
+            continue
+
         if guess in letters:
-            letters.remove(guess)
-            index = word.find(guess)
-            display = display[:index] + guess + display[index + 1:]
+            indices = [i for i, letter in enumerate(word) if letter == guess]   #find all instances of guessed letter
+            for index in indices:
+                display = display[:index] + guess + display[index + 1:]         #remove all instances of guessed letter from list of letters
+            letters = [letter for letter in letters if letter != guess]
+
         else:
             guessed.append(guess)
             count += 1
